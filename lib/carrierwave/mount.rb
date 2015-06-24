@@ -250,6 +250,12 @@ module CarrierWave
           _mounter(:#{column}).remove = false
         end
 
+        private
+
+        def initialize_dup(other)
+          @previous_model_for_#{column} = nil
+          super
+        end
       RUBY
     end
 
@@ -288,6 +294,11 @@ module CarrierWave
         return Mounter.new(self, column) if frozen?
         @_mounters ||= {}
         @_mounters[column] ||= Mounter.new(self, column)
+      end
+
+      def initialize_dup(other)
+        @_mounters = nil
+        super
       end
 
     end # Extension
